@@ -1,0 +1,191 @@
+Master/Slave in Jenkins
+=============================
+This is also called as distributed jenkins build 
+When we want to run multiple jenkins jobs parallelly on the 
+Jenkins server(Master) we migh face perfromance related challanges
+because each job consumes certain amount of h/w resources.
+
+To overcome this problem we can create seperate linux servers
+and make them as slaves and distribute the work load of jenkins
+
+Setup of Slave
+=======================
+1 Create a new AWS ubuntu 18 instances
+
+2 Install the same version of java present on Master
+  sudo apt-get update
+  sudo apt-get install -y openjdk-8-jdk
+
+3 Create passwordless ssh between Master to slave
+  a) Connect to slave and setup password for the ubuntu user
+     sudo passwd ubuntu
+  b) Edit the sshd_config file
+     sudo vim /etc/ssh/sshd_config
+     Search for "PAsswordAuthentication" and change it from no to yes
+  c) Restart ssh
+     sudo service ssh restart
+  d) Connect to Master using git bash
+  e) Generate the ssh keys
+     ssh-keygen
+     This will generate 2 keys called as public and private in .ssh folder
+  f) ssh-copy-id ubuntu@private_ip_slave
+     This will copy the content of the public keys into a file called
+     authorised_keys on the slave machine
+
+
+
+
+4 Download slave.jar
+  wget http://private_ip_of_master:8080/jnlpJars/slave.jar
+
+5 Give execute permissions on this slave.jar
+  chmod u+x slave.jar
+
+6 Create an empty folder to act as workspace
+  mkdir myjenkins
+
+
+=====================================================================
+1 Open the dashboard of Jenkins
+
+2 Click on Mnage JEnkins
+
+3 Click on Manage nodes
+
+4 Click on New node
+
+5 Enter some node name
+
+6 Select Permaanant Agent
+
+7 Remote root directory:  /home/ubuntu/myjenkins
+
+8 Labels: myslave
+
+9 Go to Launch Method--->Select "Launch agnet via execution of command on master"
+
+10 ssh ubuntu@private_ip_slave  java -jar slave.jar
+
+11 Click on Save
+
+12 Go back to the dashboard of Jenkins
+
+13 Identify the job that we want to run on slave--->Click on Configure
+
+14 Go to General section---->Check "Restrict where this project can be run"
+
+15 Enter slave label: myslave
+
+16 Apply--->Save
+
+
+
+
+=====================================================================
+Pipeline as Code
+======================
+Implementing all the stages of CI-CD from the level of a Grrovy script
+file is called as Pipleine as Code.This groovy script files is called
+as Jenkinsfile and generally it is uploaded into the remote git server
+along with the application code.From the remote git server this JEnkinsfile
+will trigger all the stages of CI-CD
+
+Advantages
+====================
+1 Since the stages of CI-CD are implemented from the level of code
+  it can perform version controlling on it ie it gives the team members
+  ability to edit and review the code and yet maintain multiple versions 
+  of jenkinsfile
+
+2 Jenkinsfile can withstand planned and unplanned restarts of the Jenkins
+  master
+
+3 It can perform all stages of CI-CD with minumum number of plugins as
+  a result of which it give better perfromance than the free style projects
+
+4 It can handle all the real time challanges like if conditions,
+  errror handling etc
+
+
+Pipeline can be implemented in 2 ways
+1 Scripted Pipeline
+2 Declarative Pipeline
+
+Syntax of Scripted Pipeline
+=================================
+node('master')
+{
+   stage('Stage name in CI-CD')
+   {
+       Groovy script code for implementing this stage
+   }
+}
+
+
+Syntax of Declarative Pipeline
+====================================
+pipeline
+{
+   agent any
+   stages
+   {
+      stage('Stage name in CI-CD')
+      {
+          steps
+          {
+               Groovy script for implementing this stage
+          }
+      }
+   }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
