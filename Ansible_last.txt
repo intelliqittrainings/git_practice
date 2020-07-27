@@ -1,0 +1,164 @@
+Ansible playbook to intitilze the docker swarm
+
+- name: Initilise the docker swarm on manager
+  hosts: manager
+  tasks:
+   - name: Create docker swarm
+     docker_swarm:
+      state: present
+
+To generate the toke id for workers to joun swarm
+ansible manager -m shell -a 'docker swarm join-token worker' -b
+
+Playbook to add workers to the swarm
+---
+- name: Join workers to the swarm cluster
+  hosts: workers
+  tasks:
+   - name: Join workers to swarm
+     docker_swarm:
+      state: join
+      advertise_addr: 172.31.37.220
+      join_token: SWMTKN-1-33hmtvum9qegdk4t1gnn869by61mpsr49w1jkszvt6z18xfw0r-22f59e3w9xu46wsdwkqlce2zo
+      remote_addrs: [ '172.31.37.220:2377' ]
+
+
+==============================================================================
+
+Vagrant
+===================
+1 Download and install Oracle virtual Box
+  https://www.virtualbox.org/wiki/Downloads
+
+2 Download and install vagrant
+  https://www.vagrantup.com/downloads.html
+
+3 To check if vagrant is installed
+  vagrant --version
+
+4 Copy the vagrantfile into an empty folder
+
+5 Open cmd prompt
+  cd path_of_folder_where_vagrantfile_is_copied
+  vagrant up
+
+6 To destroy the VM's
+  vagrant destroy
+
+===================================================================
+Professional Summanry
+
+Having 4+ years of exp in Devops implementation
+
+Overall 8 years of exp in IT industry
+
+Experience in automating Devops practices in an Agile Scrum Environment
+
+Well versed in version controlling using git
+
+Good exposure in creating branches and working on different branch stratagies
+as per requirement.
+
+Performed CI-CD using tools like Jenkins and Bamboo
+
+Good understanding in setup of Master/Slave for distributed JEnkins builds
+
+Experience in creating Groovy script based Jenkinsfiles for pipeline based jobs
+
+Implemented Multi branch pipleine jobs in Jenkins.
+
+Proficient in setup of Dev and Testing environments uisng docker
+
+Created customised docker image based on organizations requirement using 
+dockerfile
+
+Excellent exposure in setiing up multi container architectures using docker compose
+
+Implemented docker at the level of Production using Kubernetes and Swarm
+
+Proficient in handling all the production challanges like load balancing
+auto scalling,rolling update,hight availablity etc using Kubernetes and Swarm
+
+Experience in automating remote servers using Ansible
+
+Well versed in creation of Ansible playbook and roles for configuring s/w applications on remote servers
+
+Remotely configured applications like Docker ,tomcat8,Apahce etc uSing Ansible
+
+Implemented automation of Devops tools using Python scripts
+
+Worked in integrating Ansible with tools like Jenkins and Docker
+
+
+selenium.saikrishna@gmail.com
+
+gandham.saikrishna@gmail.com
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+=====
+
+
+
+
+
+
+
+
+
+
+
+ 
